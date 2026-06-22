@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Marine Pollution Detection System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1> Marine Pollution Detection System</h1>
+
+    <p class="subtitle">
+        Upload an underwater image to detect marine pollution.
+    </p>
+
+    <form action="/predict"
+          method="POST"
+          enctype="multipart/form-data">
+
+        <input type="file"
+               name="file"
+               required>
+
+        <button type="submit">
+            Detect
+        </button>
+
+    </form>
+
+    {% if prediction %}
+
+    <div class="card">
+
+        <img src="{{ url_for('uploaded_file', filename=image) }}"
+             class="preview">
+
+        <h2>{{ prediction }}</h2>
+
+        <h3>Confidence: {{ confidence }}%</h3>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>
