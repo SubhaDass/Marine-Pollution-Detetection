@@ -1,53 +1,69 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>Marine Pollution Detection System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Underwater Trash Detection</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <h1> Marine Pollution Detection System</h1>
+        <h1> Underwater Trash Detection</h1>
 
-    <p class="subtitle">
-        Upload an underwater image to detect marine pollution.
-    </p>
+        <p class="subtitle">
+            Upload an underwater image and let AI detect whether trash is present.
+        </p>
 
-    <form action="/predict"
-          method="POST"
-          enctype="multipart/form-data">
+        <form action="/predict"
+              method="POST"
+              enctype="multipart/form-data">
 
-        <input type="file"
-               name="file"
-               required>
+            <input type="file"
+                   name="file"
+                   accept="image/*"
+                   required>
 
-        <button type="submit">
-            Detect
-        </button>
+            <br>
 
-    </form>
+            <button type="submit">
+                Detect
+            </button>
 
-    {% if prediction %}
+        </form>
 
-    <div class="card">
+        {% if prediction %}
 
-        <img src="{{ url_for('uploaded_file', filename=image) }}"
-             class="preview">
+        <div class="card">
 
-        <h2>{{ prediction }}</h2>
+            <img src="{{ url_for('uploaded_file', filename=image) }}"
+                 alt="Uploaded Image"
+                 class="preview">
 
-        <h3>Confidence: {{ confidence }}%</h3>
+            <h2>Detection Result</h2>
+
+            <p class="result {% if prediction == 'Trash Detected' %}trash{% else %}clean{% endif %}">
+                {{ prediction }}
+            </p>
+
+            <p class="confidence">
+                Confidence: {{ confidence }}%
+            </p>
+
+        </div>
+
+        {% endif %}
+
+        <div class="footer">
+            <p>
+                AI-Powered Underwater Waste Detection System
+            </p>
+        </div>
 
     </div>
-
-    {% endif %}
-
-</div>
 
 </body>
 </html>
