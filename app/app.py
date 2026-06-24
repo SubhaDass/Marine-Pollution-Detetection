@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, send_from_directory
 import tensorflow as tf
 import numpy as np
-from tensorflow.keras.preprocessing import image # type: ignore
+from tensorflow.keras.preprocessing import image 
 import os
 
 app = Flask(__name__)
