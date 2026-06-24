@@ -11,7 +11,6 @@ BATCH_SIZE = 32
 EPOCHS = 10
 
 
-# Load Dataset
 train_ds = tf.keras.utils.image_dataset_from_directory(
     "../dataset/train",
     image_size=IMG_SIZE,
@@ -35,21 +34,18 @@ test_ds = tf.keras.utils.image_dataset_from_directory(
 
 print("Classes:", train_ds.class_names)
 
-# Performance Optimization
 AUTOTUNE = tf.data.AUTOTUNE
 
 train_ds = train_ds.prefetch(buffer_size=AUTOTUNE)
 val_ds = val_ds.prefetch(buffer_size=AUTOTUNE)
 test_ds = test_ds.prefetch(buffer_size=AUTOTUNE)
 
-# Data Augmentation
 data_augmentation = Sequential([
     tf.keras.layers.RandomFlip("horizontal"),
     tf.keras.layers.RandomRotation(0.1),
     tf.keras.layers.RandomZoom(0.1),
 ])
 
-# MobileNetV2 Base
 base_model = MobileNetV2(
     weights="imagenet",
     include_top=False,
@@ -58,7 +54,6 @@ base_model = MobileNetV2(
 
 base_model.trainable = False
 
-# Build Model
 inputs = tf.keras.Input(shape=(224, 224, 3))
 
 x = data_augmentation(inputs)
@@ -76,7 +71,6 @@ outputs = Dense(2, activation="softmax")(x)
 
 model = Model(inputs, outputs)
 
-# Compile
 model.compile(
     optimizer="adam",
     loss="sparse_categorical_crossentropy",
@@ -85,7 +79,6 @@ model.compile(
 
 model.summary()
 
-# Train
 start = time.time()
 
 history = model.fit(
@@ -98,12 +91,10 @@ end = time.time()
 
 print(f"\nTraining Time: {(end-start)/60:.2f} minutes")
 
-# Evaluate
 loss, acc = model.evaluate(test_ds)
 
 print("\nTest Accuracy:", round(acc * 100, 2), "%")
 
-# Save Model
 model.save("model.keras")
 
 print("\nModel saved successfully!")
